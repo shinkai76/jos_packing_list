@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<!--<html manifest='application.manifest'>-->
+<html>
+    
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <style type="text/css">
+            @font-face {
+                font-family: simsun;
+                src: url({{font_url}});
+            }
+            body {
+                font-family: simsun;
+                font-size:9px;
+            }
+            .myTable,.myTable td {   
+                border:1px solid #cccccc;   
+                border-collapse:collapse;  
+            }
+            @page {
+                size:21cm 29.7cm;
+                margin-top: 0cm;
+                margin-bottom:2cm;
+                margin-left: 0.2cm;
+                margin-right:0.2cm;
+                font-family: simhei;
+
+                @frame footer {
+                    -pdf-frame-content:footerContent;
+                    bottom:0.1 cm;
+                    height:2cm;
+                    margin-right: 0.2cm;
+                    margin-left:0.2cm;
+                }
+            }
+            img { zoom: 20%; }
+        </style>
+     </head>
+<body>
+    <table class='myTable' style="width: 100%" repeat='1'>
+        <tr>
+            <td style="text-align: center;vertical-align: middle;padding-top: 2px;" colspan="6"><font size="3">送货单</font></td>
+        </tr>
+        <tr>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:10%;">送货单号(自编)</td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:60%;">{{ packing_list.form_code }}</td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;" colspan="2">供应商名称</td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;" colspan="2">{{ set_of_book.name }}</td>
+        </tr>
+        <tr>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:10%;">采购单号</td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:60%;">{{ packing_list.order_id }}</td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;" colspan="2">总箱数</td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;" colspan="2"></td>
+        </tr>
+        <tr>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:10%;">目的城市</td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:60%;">{{ packing_list.des }}</td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;" colspan="2">目的仓库</td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;" colspan="2">{{ packing_list.store }}</td>
+        </tr>
+        <tr>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:10%;">TC预约号</td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:60%;"></td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;" colspan="2">TC预约送货日期</td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;" colspan="2"></td>
+        </tr>
+        <tr>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:10%;">箱号/箱号段</td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:60%;">商品名称</td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:5%;">SKU</td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:10%;">箱规（个/箱）</td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:10%;">商品总数量/个</td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:5%;">备注</td>
+        </tr>
+        {% set total_quantity = 0 %}
+        {% for line in packing_list.packing_list_line.product_lines %}
+        {% set total_quantity += line.packing_quantity %}
+        <tr>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:10%;"></td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:60%;">{{ line.product_name }}</td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:5%;">{{ line.product_code }}</td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:10%;">{{ line.packing_quantity }}</td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:10%;">{{ packing_list.packing_list_line.total_quantity }}</td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:5%;"></td>
+        </tr>
+        {% end %}
+        <tr>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:10%;">合计</td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:60%;"></td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:5%;"></td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:10%;">{{ total_quantity }}</td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:10%;"></td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:5%;"></td>
+        </tr>
+        <tr>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:10%;">&nbsp;<br/>供应商发货签章:<br/>&nbsp;</td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;" colspan="2"></td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:10%;">&nbsp;<br/>TC发货签章:<br/>&nbsp;</td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;" colspan="2"></td>
+        </tr>
+        <tr>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;width:10%;">备注:</td>
+            <td style="vertical-align:middle;padding-top:2px;padding-right:2px;text-align:center;" colspan="5"></td>
+        </tr>
+    </table>
+
+</body>
+</html>
